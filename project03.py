@@ -23,13 +23,14 @@ def run():
     itable = PrettyTable()
     ftable = PrettyTable()
     f = open("Project01.ged", "r")
-    itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Death Date', 'Age']
+    itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Death Date', 'Age', 'Alive']
     indi = ''
     name = ''
     sex = ''
     bdate = ''
     ddate = 'N/A'
     age = ''
+    alive = 'True'
     
     byear = 0
     
@@ -40,8 +41,9 @@ def run():
             if(len(temp) > 2):
                 if temp[2] == 'INDI':
                     if indi != '':
-                        itable.add_row([indi, name, sex, bdate, ddate, age])
+                        itable.add_row([indi, name, sex, bdate, ddate, age, alive])
                         ddate = 'N/A'
+                        alive = 'True'
                     indi = temp[1]
          
         if temp[0] == '1':
@@ -62,6 +64,7 @@ def run():
                     byear = int(temp[4])
                     age = 2020 - byear
                 if dtype == 'death':
+                    alive = 'False'
                     ddate = dtemp
                     age = int(temp[4]) - byear
                 
