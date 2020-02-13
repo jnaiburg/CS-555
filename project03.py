@@ -15,6 +15,7 @@ def run():
     f = open("Project01.ged", "r")
     #make the columns for the itable
     itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Death Date', 'Age', 'Alive']
+    ftable.field_names = ['ID']
     #initialize a bunch of variables
     indi = ''
     name = ''
@@ -24,6 +25,9 @@ def run():
     age = ''
     alive = 'True'
     child = 'N/A'
+    isindi = True
+    
+    famid = ''
     
     byear = 0
     
@@ -44,6 +48,14 @@ def run():
                         alive = 'True'
                         #get the new id for the next guy
                     indi = temp[1]
+                if temp[2] == 'FAM':
+                    if isindi:
+                        itable.add_row([indi, name, sex, bdate, ddate, age, alive])
+                        isindi = False
+                    else:
+                        ftable.add_row([famid])
+                    famid = temp[1]
+                        
         #id 0
         if temp[0] == '1':
             #the persons name
@@ -75,7 +87,7 @@ def run():
                     #age at time of death
                     age = int(temp[4]) - byear
     #add the last row and print stuff
-    itable.add_row([indi, name, sex, bdate, ddate, age, alive])
+    ftable.add_row([famid])
     print("Individuals")
     print(itable)
     print("Families")
