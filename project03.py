@@ -1,6 +1,5 @@
 '''
 Created on Feb 5, 2020
-
 @author: Joseph Naiburg
 '''
 
@@ -14,8 +13,8 @@ def run():
     #open the ged file
     f = open("Project01.ged", "r")
     #make the columns for the itable
-    itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Death Date', 'Age', 'Alive']
-    ftable.field_names = ['ID']
+    itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Age', 'Alive', 'Death Date', 'Child', 'Spouse']
+    ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Husband Name', 'Wife ID', 'Wife Name', 'Children']
     #initialize a bunch of variables
     indi = ''
     name = ''
@@ -25,9 +24,19 @@ def run():
     age = ''
     alive = 'True'
     child = 'N/A'
+    spouse = 'N/A'
     isindi = True
     
     famid = ''
+    mdate=''
+    divorced='N/A'
+    husbid=''
+    husb=''
+    wifeid=''
+    wife=''
+    children='N/A'
+    
+    
     
     byear = 0
     
@@ -43,18 +52,20 @@ def run():
                 if temp[2] == 'INDI':
                     if indi != '':
                         #add the row of info for the previous guy to the itable
-                        itable.add_row([indi, name, sex, bdate, ddate, age, alive])
+                        itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
                         ddate = 'N/A'
                         alive = 'True'
+                        child = 'N/A'
+                        spouse = 'N/A'
                         #get the new id for the next guy
                     indi = temp[1]
                 if temp[2] == 'FAM':
                     if isindi:
-                        itable.add_row([indi, name, sex, bdate, ddate, age, alive])
+                        itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
                         isindi = False
                     else:
-                        ftable.add_row([famid])
-                    famid = temp[1]
+                        ftable.add_row([famid, mdate, divorced, husbid, husb, wifeid, wife, children])
+                    famid = temp[1] 
                         
         #id 0
         if temp[0] == '1':
@@ -70,6 +81,23 @@ def run():
             #same but with death date
             if temp[1] == 'DEAT':
                 dtype = 'death'
+            
+            if temp[1] == 'MARR':
+                dtype = 'marr'
+            if temp[1] == 'DIV':
+                dtype = 'divorce'
+            
+            if temp[1] == 'FAMC':
+                child = temp[2]
+            if temp[1] == 'FAMS':
+                spouse = temp[2]
+            
+            if temp[1] == 'HUSB':
+                husbid = temp[2]
+            if temp[1] == 'WIFE':
+                wifeid = temp[2]
+            if temp[1] == 'CHIL':
+                children = temp[2]
         
         #id 2 
         if temp[0] == '2':
@@ -86,8 +114,12 @@ def run():
                     ddate = dtemp
                     #age at time of death
                     age = int(temp[4]) - byear
+                if dtype == 'marr':
+                    mdate = dtemp
+                if dtype == 'divorce':
+                    divorced = dtemp
     #add the last row and print stuff
-    ftable.add_row([famid])
+    ftable.add_row([famid, mdate, divorced, husbid, husb, wifeid, wife, children])
     print("Individuals")
     print(itable)
     print("Families")
@@ -95,5 +127,3 @@ def run():
             
         
 run()
-        
- 
