@@ -91,6 +91,12 @@ def run():
             if temp[1] == 'DEAT':
                 dtype = 'death'
             
+            if temp[1] == 'HUSB':
+                husband = people_dict[temp[2]][0]
+            
+            if temp[1] == 'WIFE':
+                wife = people_dict[temp[2]][0]    
+            
             if temp[1] == 'MARR':
                 dtype = 'marr'
             if temp[1] == 'DIV':
