@@ -1,0 +1,151 @@
+0 NOTE https://github.com/jnaiburg/CS-555/
+0 HEAD
+1 SOUR Family Echo
+2 WWW http://www.familyecho.com/
+1 FILE My Family
+1 DATE 27 JAN 2020
+1 DEST ANSTFILE
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 SUBM @I1@
+2 NAME Vincenzo Susi
+1 SUBN
+1 CHAR UTF-8
+0 @I1@ INDI
+1 NAME Joseph /Smith/
+2 GIVN Joseph
+2 SURN Smith
+2 _MARNM Smith
+1 SEX M
+1 BIRT
+2 DATE 6 MAY 1930
+1 FAMS @F1@
+1 FAMS @F2@
+0 @I2@ INDI
+1 NAME Francesca /Williams/
+2 GIVN Francesca
+2 SURN Williams
+2 _MARNM Smith
+1 SEX F
+1 BIRT
+2 DATE 13 SEP 1930
+1 DEAT Y
+2 DATE 17 APR 1965
+1 FAMS @F2@
+0 @I3@ INDI
+1 NAME Amanda /Yip/
+2 GIVN Amanda
+2 SURN Yip
+2 _MARNM Smith
+1 SEX F
+1 BIRT
+2 DATE 28 DEC 1936
+1 FAMS @F1@
+0 @I4@ INDI
+1 NAME Patrick /Smith/
+2 GIVN Patrick
+2 SURN Smith
+2 _MARNM Smith
+1 SEX M
+1 BIRT
+2 DATE 2 FEB 1962
+1 FAMC @F2@
+0 @I5@ INDI
+1 NAME Sophia /Smith/
+2 GIVN Sophia
+2 SURN Smith
+2 _MARNM Johnson
+1 SEX F
+1 BIRT
+2 DATE 18 OCT 1964
+1 FAMS @F3@
+1 FAMC @F2@
+0 @I6@ INDI
+1 NAME George /Smith/
+2 GIVN George
+2 SURN Smith
+2 _MARNM Smith
+1 SEX M
+1 BIRT
+2 DATE 15 MAR 1974
+1 FAMS @F4@
+1 FAMC @F1@
+0 @I7@ INDI
+1 NAME Samantha /Davis/
+2 GIVN Samantha
+2 SURN Davis
+2 _MARNM Smith
+1 SEX F
+1 BIRT
+2 DATE 14 JUN 1974
+1 FAMS @F4@
+0 @I8@ INDI
+1 NAME Nicholas /Johnson/
+2 GIVN Nicholas
+2 SURN Johnson
+2 _MARNM Johnson
+1 SEX M
+1 BIRT
+2 DATE 31 OCT 1972
+1 FAMS @F3@
+0 @I9@ INDI
+1 NAME Derek /Johnson/
+2 GIVN Derek
+2 SURN Johnson
+2 _MARNM Johnson
+1 SEX M
+1 BIRT
+2 DATE 23 MAY 2002
+1 FAMC @F3@
+0 @I10@ INDI
+1 NAME Florence /Smith/
+2 GIVN Florence
+2 SURN Smith
+2 _MARNM Smith
+1 SEX F
+1 BIRT
+2 DATE 10 NOV 2000
+1 FAMC @F4@
+0 @I11@ INDI
+1 NAME Gary /Smith/
+2 GIVN Gary
+2 SURN Smith
+2 _MARNM Smith
+1 SEX M
+1 BIRT
+2 DATE 8 AUG 2004
+1 FAMC @F4@
+0 @F1@ FAM
+1 HUSB @I1@
+1 WIFE @I3@
+1 CHIL @I6@
+1 MARR
+2 DATE 16 AUG 1972
+1 _CURRENT Y
+0 @F2@ FAM
+1 HUSB @I1@
+1 WIFE @I2@
+1 CHIL @I4@
+1 CHIL @I5@
+1 MARR
+2 DATE 30 SEP 1958
+1 EVEN
+2 TYPE Ending
+1 _CURRENT N
+0 @F3@ FAM
+1 HUSB @I8@
+1 WIFE @I5@
+1 CHIL @I9@
+1 MARR
+2 DATE 25 JUN 2000
+1 _CURRENT Y
+0 @F4@ FAM
+1 HUSB @I6@
+1 WIFE @I7@
+1 CHIL @I10@
+1 CHIL @I11@
+1 MARR
+2 DATE 14 JAN 1998
+1 _CURRENT Y
+0 TRLR
