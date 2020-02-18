@@ -5,6 +5,9 @@ Created on Feb 5, 2020
 
 from prettytable import PrettyTable
 
+people_dict = {}
+fam_dict = {}
+
 def run():
     
     #initialize the individual table and family table
@@ -14,7 +17,7 @@ def run():
     f = open("gedcom.ged", "r")
     #make the columns for the itable
     itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Age', 'Alive', 'Death Date', 'Child', 'Spouse']
-    ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Wife ID', 'Children']
+    ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Husband Name', 'Wife ID', 'Wife Name', 'Children']
     #initialize a bunch of variables
     indi = ''
     name = ''
@@ -32,7 +35,9 @@ def run():
     divorced='N/A'
     husbid=''
     wifeid=''
-    children='N/A'
+    husband = ''
+    wife = ''
+    children = []
     
     
     
@@ -51,6 +56,7 @@ def run():
                     if indi != '':
                         #add the row of info for the previous guy to the itable
                         itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
+                        people_dict[indi] = [name, sex, bdate, age, alive, ddate, child, spouse]
                         ddate = 'N/A'
                         alive = 'True'
                         child = 'N/A'
@@ -60,9 +66,14 @@ def run():
                 if temp[2] == 'FAM':
                     if isindi:
                         itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
+                        people_dict[indi] = [name, sex, bdate, age, alive, ddate, child, spouse]
                         isindi = False
                     else:
-                        ftable.add_row([famid, mdate, divorced, husbid, wifeid, children])
+                        if children == []:
+                            children = 'N/A'
+                        ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
+                        fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
+                        children = []
                     famid = temp[1] 
                         
         #id 0
@@ -96,7 +107,7 @@ def run():
             if temp[1] == 'WIFE':
                 wifeid = temp[2]
             if temp[1] == 'CHIL':
-                children = temp[2]
+                children.append(temp[2])
         
         #id 2 
         if temp[0] == '2':
@@ -118,7 +129,7 @@ def run():
                 if dtype == 'divorce':
                     divorced = dtemp
     #add the last row and print stuff
-    ftable.add_row([famid, mdate, divorced, husbid, wifeid, children])
+    ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
     print("Individuals")
     print(itable)
     print("Families")
