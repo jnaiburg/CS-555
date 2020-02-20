@@ -1,54 +1,79 @@
 '''
-Created on Feb 5, 2020
-@author: Joseph Naiburg
+Created on Feb 19, 2020
+@author: Joseph Naiburg, Tim Leonard
 '''
 
+#Dates (birth, marriage, divorce, death) should not be after the current date
+from datetime import datetime
 from prettytable import PrettyTable
-from test_us02 import TestUS02
-
-month_dict = {
-        'JAN' : 1,
-        'FEB' : 2,
-        'MAR' : 3,
-        'APR' : 4,
-        'MAY' : 5,
-        'JUN' : 6,
-        'JUL' : 7,
-        'AUG' : 8,
-        'SEP' : 9, 
-        'OCT' : 10,
-        'NOV' : 11,
-        'DEC' : 12
-}
 
 people_dict = {}
 fam_dict = {}
 
-def US02(Hy, Wy, My, Hm, Wm, Mm, Hd, Wd, Md):
-    if(My < Wy or My <Hy):
-        return False
-    elif(My == Hy):
-        if(Mm < Hm):
-            return False
-        elif(Mm == Hm):
-            if(Md < Hd):
-                return False
-    elif(My == Wy):
-        if(Mm < Wm):
-            return False
-        elif(Mm == Wm):
-            if(Md < Wd):
-                return False
+
+def getCurrentDate():
+  ret = []
+  now = datetime.now()
+  ret.append(now.day)
+  ret.append(now.month)
+  ret.append(now.year)
+  return ret
+
+def strToIntArrDate(date):
+    ret = []
+    ddmmyyyy = date.split(' ')
+    ret.append(int(ddmmyyyy[0]))
+    if(ddmmyyyy[1] == 'JAN'):
+      ret.append(1)
+    elif(ddmmyyyy[1] == 'FEB'):
+      ret.append(2)
+    elif(ddmmyyyy[1] == 'MAR'):
+      ret.append(3)
+    elif(ddmmyyyy[1] == 'APR'):
+      ret.append(4)
+    elif(ddmmyyyy[1] == 'MAY'):
+      ret.append(5)
+    elif(ddmmyyyy[1] == 'JUN'):
+      ret.append(6)
+    elif(ddmmyyyy[1] == 'JUL'):
+      ret.append(7)
+    elif(ddmmyyyy[1] == 'AUG'):
+      ret.append(8)
+    elif(ddmmyyyy[1] == 'SEP'):
+      ret.append(9)
+    elif(ddmmyyyy[1] == 'OCT'):
+      ret.append(10)
+    elif(ddmmyyyy[1] == 'NOV'):
+      ret.append(11)
+    elif(ddmmyyyy[1] == 'DEC'):
+      ret.append(12)
+    else:
+      ret.append(13) #will never be < self.month
+    ret.append(int(ddmmyyyy[2]))
+    return ret
+
+def checkDate(d):
+  today = getCurrentDate()
+  if(d == 'N/A'):
     return True
-    
+  else:
+    dateNums = strToIntArrDate(d)
+    if(dateNums[2] > today[2]):
+          return False
+    elif(dateNums[2] == today[2]):
+      if(dateNums[1] > today[1]):
+        return False
+      elif(dateNums[1] == today[1]):
+        if(dateNums[0] > today[0]):
+          return False
+  return True
 
 def run():
-    
     #initialize the individual table and family table
     itable = PrettyTable()
     ftable = PrettyTable()
     #open the ged file
-    f = open("Project01.ged", "r")
+    f = open("gedcom.ged", "r")
     #make the columns for the itable
     itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Age', 'Alive', 'Death Date', 'Child', 'Spouse']
     ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Husband Name', 'Wife ID', 'Wife Name', 'Children']
@@ -89,6 +114,8 @@ def run():
                 if temp[2] == 'INDI':
                     if indi != '':
                         #add the row of info for the previous guy to the itable
+                        if(not checkDate(bdate) or not checkDate(ddate)):
+                          raise SyntaxError('Dates must be today or earlier')
                         itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
                         people_dict[indi] = [name, sex, bdate, age, alive, ddate, child, spouse]
                         ddate = 'N/A'
@@ -99,37 +126,18 @@ def run():
                     indi = temp[1]
                 if temp[2] == 'FAM':
                     if isindi:
+                        if(not checkDate(bdate) or not checkDate(ddate)):
+                          raise SyntaxError('Dates must be today or earlier')
                         itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
                         people_dict[indi] = [name, sex, bdate, age, alive, ddate, child, spouse]
                         isindi = False
                     else:
                         if children == []:
                             children = 'N/A'
+                        if(not checkDate(mdate) or not checkDate(divorced)):
+                          raise SyntaxError('Dates must be today or earlier')
                         ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
                         fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
-                        
-                        #getting the marriage date for the family
-                        mdatetemp = mdate.split()
-                        myear = mdatetemp[2]
-                        mmonth = month_dict[mdatetemp[1]]
-                        mday = mdatetemp[0]
-                        
-                        #getting the husbands and wifes bdate
-                        bdatetemphusb = people_dict[fam_dict[famid][2]][2].split()
-                        bdatetempwife = people_dict[fam_dict[famid][3]][2].split()
-                        husbyear = bdatetemphusb[2]
-                        husbmonth = month_dict[bdatetemphusb[1]]
-                        husbday = bdatetemphusb[0]
-                        wifeyear = bdatetempwife[2]
-                        wifemonth = month_dict[bdatetempwife[1]]
-                        wifeday = bdatetempwife[0]
-                        
-                        #make sure marriage date is after birth date
-                        if not US02(husbyear, wifeyear, myear, husbmonth, wifemonth, mmonth, husbday, wifeday, mday):
-                            print("Error: Family with id " + famid + " has a marriage date before a birth date")
-                        
-                        
-                        
                         children = []
                     famid = temp[1] 
                         
@@ -192,30 +200,14 @@ def run():
                 if dtype == 'divorce':
                     divorced = dtemp
     #add the last row and print stuff
+    if(not checkDate(mdate) or not checkDate(divorced)):
+      raise SyntaxError('Dates must be today or earlier')
     ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
-    fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
-    mdatetemp = mdate.split()
-    myear = mdatetemp[2]
-    mmonth = month_dict[mdatetemp[1]]
-    mday = mdatetemp[0]
-    
-    #getting the husbands and wifes bdate
-    bdatetemphusb = people_dict[fam_dict[famid][2]][2].split()
-    bdatetempwife = people_dict[fam_dict[famid][3]][2].split()
-    husbyear = bdatetemphusb[2]
-    husbmonth = month_dict[bdatetemphusb[1]]
-    husbday = bdatetemphusb[0]
-    wifeyear = bdatetempwife[2]
-    wifemonth = month_dict[bdatetempwife[1]]
-    wifeday = bdatetempwife[0]
-    
-    #make sure marriage date is after birth date
-    if not US02(husbyear, wifeyear, myear, husbmonth, wifemonth, mmonth, husbday, wifeday, mday):
-        print("Error: Family with id " + famid + " has a marriage date before a birth date")
-    print("Individuals")
-    print(itable)
-    print("Families")
-    print(ftable)
+    # print("Individuals")
+    # print(itable)
+    # print("Families")
+    # print(ftable)
+    return [itable, ftable]
             
-        
-run()
+if __name__ == '__main__':
+    run()
