@@ -24,22 +24,18 @@ month_dict = {
 people_dict = {}
 fam_dict = {}
 
-def US02(Hy, Wy, My, Hm, Wm, Mm, Hd, Wd, Md):
-    if(My < Wy or My <Hy):
+def US02(mdate, husbdate, wifedate):
+    mdatetemp = mdate.split()
+    mday = datetime.date(int(mdatetemp[2]), month_dict[mdatetemp[1]], int(mdatetemp[0]))
+    bdatetemphusb = husbdate.split()
+    bdatetempwife = wifedate.split()
+    wifeday = datetime.date(int(bdatetempwife[2]), month_dict[bdatetempwife[1]], int(bdatetempwife[0]))
+    husbday = datetime.date(int(bdatetemphusb[2]), month_dict[bdatetemphusb[1]], int(bdatetemphusb[0]))
+    if mday < husbday or mday < wifeday:
         return False
-    elif(My == Hy):
-        if(Mm < Hm):
-            return False
-        elif(Mm == Hm):
-            if(Md < Hd):
-                return False
-    elif(My == Wy):
-        if(Mm < Wm):
-            return False
-        elif(Mm == Wm):
-            if(Md < Wd):
-                return False
-    return True
+    else:
+        return True
+    
     
     
 def US03(birth, death):
@@ -74,7 +70,7 @@ def run():
     itable = PrettyTable()
     ftable = PrettyTable()
     #open the ged file
-    f = open("gedcom.ged", "r")
+    f = open("Project01.ged", "r")
     #make the columns for the itable
     itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Age', 'Alive', 'Death Date', 'Child', 'Spouse']
     ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Husband Name', 'Wife ID', 'Wife Name', 'Children']
@@ -139,24 +135,11 @@ def run():
                         ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
                         fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
                         
-                        #getting the marriage date for the family
-                        mdatetemp = mdate.split()
-                        myear = mdatetemp[2]
-                        mmonth = month_dict[mdatetemp[1]]
-                        mday = mdatetemp[0]
-                        
-                        #getting the husbands and wifes bdate
-                        bdatetemphusb = people_dict[fam_dict[famid][2]][2].split()
-                        bdatetempwife = people_dict[fam_dict[famid][3]][2].split()
-                        husbyear = bdatetemphusb[2]
-                        husbmonth = month_dict[bdatetemphusb[1]]
-                        husbday = bdatetemphusb[0]
-                        wifeyear = bdatetempwife[2]
-                        wifemonth = month_dict[bdatetempwife[1]]
-                        wifeday = bdatetempwife[0]
+                        bdatetemphusb = people_dict[fam_dict[famid][2]][2]
+                        bdatetempwife = people_dict[fam_dict[famid][3]][2]
                         
                         #make sure marriage date is after birth date
-                        if not US02(husbyear, wifeyear, myear, husbmonth, wifemonth, mmonth, husbday, wifeday, mday):
+                        if not US02(mdate, bdatetemphusb, bdatetempwife):
                             print("Error: Family with id " + famid + " has a marriage date before a birth date")
                         if not US06(divorced, people_dict[husbid][5], people_dict[wifeid][5]):
                             print("Error: Family with id " + famid + " has a death date before a divorce date")
@@ -227,23 +210,12 @@ def run():
     #add the last row and print stuff
     ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
     fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
-    mdatetemp = mdate.split()
-    myear = mdatetemp[2]
-    mmonth = month_dict[mdatetemp[1]]
-    mday = mdatetemp[0]
     
-    #getting the husbands and wifes bdate
-    bdatetemphusb = people_dict[fam_dict[famid][2]][2].split()
-    bdatetempwife = people_dict[fam_dict[famid][3]][2].split()
-    husbyear = bdatetemphusb[2]
-    husbmonth = month_dict[bdatetemphusb[1]]
-    husbday = bdatetemphusb[0]
-    wifeyear = bdatetempwife[2]
-    wifemonth = month_dict[bdatetempwife[1]]
-    wifeday = bdatetempwife[0]
+    bdatetemphusb = people_dict[fam_dict[famid][2]][2]
+    bdatetempwife = people_dict[fam_dict[famid][3]][2]
     
     #make sure marriage date is after birth date
-    if not US02(husbyear, wifeyear, myear, husbmonth, wifemonth, mmonth, husbday, wifeday, mday):
+    if not US02(mdate, bdatetemphusb, bdatetempwife):
         print("Error: Family with id " + famid + " has a marriage date before a birth date")
     print("Individuals")
     print(itable)
