@@ -49,6 +49,24 @@ def US03(birth, death):
         return False
     else:
         return True
+
+def US05(mdate, husbdate, wifedate):
+    if husbdate == "N/A" and wifedate == 'N/A':
+        return True
+    
+    mdatetemp = mdate.split()
+    mday = datetime.date(int(mdatetemp[2]), month_dict[mdatetemp[1]], int(mdatetemp[0]))
+    ddatetemphusb = husbdate.split()
+    ddatetempwife = wifedate.split()
+    if wifedate != 'N/A':
+        wifeday = datetime.date(int(ddatetempwife[2]), month_dict[ddatetempwife[1]], int(ddatetempwife[0]))
+        if mday > wifeday:
+            return False
+    if husbdate != 'N/A':
+        husbday = datetime.date(int(ddatetemphusb[2]), month_dict[ddatetemphusb[1]], int(ddatetemphusb[0]))
+        if mday > husbday:
+            return False
+    return True
     
 def US06 (divorce, hdeath, wdeath):
     if (hdeath == 'N/A' and wdeath == 'N/A'):
@@ -145,12 +163,17 @@ def run():
                         ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
                         fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
                         
-                        bdatetemphusb = people_dict[fam_dict[famid][2]][2]
-                        bdatetempwife = people_dict[fam_dict[famid][3]][2]
+                        bdatetemphusb = people_dict[husbid][2]
+                        bdatetempwife = people_dict[wifeid][2]
+                        
+                        ddatetemphusb = people_dict[husbid][5]
+                        ddatetempwife = people_dict[wifeid][5]
                         
                         #make sure marriage date is after birth date
                         if not US02(mdate, bdatetemphusb, bdatetempwife):
                             print("Error: Family with id " + famid + " has a marriage date before a birth date")
+                        if not US05(mdate, ddatetemphusb, ddatetempwife):
+                            print("Error: Family with id " + famid + " has a marriage date after a death date")
                         if not US06(divorced, people_dict[husbid][5], people_dict[wifeid][5]):
                             print("Error: Family with id " + famid + " has a death date before a divorce date")
                         
@@ -221,12 +244,19 @@ def run():
     ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
     fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
     
-    bdatetemphusb = people_dict[fam_dict[famid][2]][2]
-    bdatetempwife = people_dict[fam_dict[famid][3]][2]
+    bdatetemphusb = people_dict[husbid][2]
+    bdatetempwife = people_dict[wifeid][2]
+                        
+    ddatetemphusb = people_dict[husbid][5]
+    ddatetempwife = people_dict[wifeid][5]
     
     #make sure marriage date is after birth date
     if not US02(mdate, bdatetemphusb, bdatetempwife):
         print("Error: Family with id " + famid + " has a marriage date before a birth date")
+    if not US05(mdate, ddatetemphusb, ddatetempwife):
+        print("Error: Family with id " + famid + " has a marriage date after a death date")
+    if not US06(divorced, people_dict[husbid][5], people_dict[wifeid][5]):
+        print("Error: Family with id " + famid + " has a death date before a divorce date")
     print("Individuals")
     print(itable)
     print("Families")
