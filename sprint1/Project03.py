@@ -1,6 +1,6 @@
 '''
 Created on Feb 5, 2020
-@author: Vincenzo Susi
+@author: Joseph Naiburg, Vincenzo Susi, Timothy Leonard
 '''
 
 from prettytable import PrettyTable
@@ -54,6 +54,19 @@ def US03(birth, death):
     else:
         return True
     
+def US06 (divorce, hdeath, wdeath):
+    if((hdeath == 'N/A' and wdeath == 'N/A') or divorce == 'N/A'):
+        return True
+    divd = divorce.split()
+    hdd = hdeath.split()
+    wdd = wdeath.split()
+    divday = datetime.date(int(divd[2]), month_dict[divd[1]], int(divd[0]))
+    hdday = datetime.date(int(hdd[2]), month_dict[hdd[1]], int(hdd[0]))
+    wdday = datetime.date(int(wdd[2]), month_dict[wdd[1]], int(wdd[0]))
+    if (hdday < divday) or (wdday < divday) :
+        return False
+    else:
+        return True
 
 def run():
     
@@ -110,7 +123,7 @@ def run():
                         spouse = 'N/A'
                         
                         #make sure birth date is before death date
-                        if  not US03(bdate, ddate):
+                        if not US03(bdate, ddate):
                             print("Error: Family with id " + famid + " has a death date before a birth date")
                         
                         #get the new id for the next guy
@@ -145,6 +158,8 @@ def run():
                         #make sure marriage date is after birth date
                         if not US02(husbyear, wifeyear, myear, husbmonth, wifemonth, mmonth, husbday, wifeday, mday):
                             print("Error: Family with id " + famid + " has a marriage date before a birth date")
+                        if not US06(divorced, people_dict[husbid][5], people_dict[wifeid][5]):
+                            print("Error: Family with id " + famid + " has a death date before a divorce date")
                         
                         
                         
