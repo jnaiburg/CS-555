@@ -72,7 +72,7 @@ def US06 (divorce, hdeath, wdeath):
     if (hdeath == 'N/A' and wdeath == 'N/A'):
         return True
     
-    if (divorce != 'N/A'):
+    if (divorce == 'N/A'):
         return True
     
     divd = divorce.split()
