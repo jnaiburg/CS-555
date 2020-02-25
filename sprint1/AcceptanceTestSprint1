@@ -1,0 +1,24 @@
+import unittest
+
+from project03 import *
+
+class TestUS02(unittest.TestCase):
+    def test1(self):
+        self.assertEqual(US02("4 JUL 1996", "4 SEP 1962", "4 SEP 1962"), True)
+    
+    def test2(self):
+        self.assertEqual(US02("4 JUL 1996", "4 SEP 2000", "4 SEP 1962"), False)
+
+    def test3(self):
+        self.assertEqual(US02("4 JUL 1996", "4 SEP 1996", "4 SEP 1962"), False)
+        
+    def test4(self):
+        self.assertEqual(US02("4 JUL 1996", "5 JUL 1996", "4 SEP 1962"), False)
+    
+    def test5(self):
+        self.assertEqual(US02("4 JUL 1996", "3 JUL 1996", "4 SEP 1962"), True)
+    
+        
+        
+if __name__ == '__main__':
+    unittest.main()
