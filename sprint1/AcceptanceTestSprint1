@@ -2,22 +2,28 @@ import unittest
 
 from project03 import *
 
-class TestUS02(unittest.TestCase):
-    def test1(self):
+class acceptanceTest(unittest.TestCase):
+    
+    def testUS02(self):
         self.assertEqual(US02("4 JUL 1996", "4 SEP 1962", "4 SEP 1962"), True)
-    
-    def test2(self):
         self.assertEqual(US02("4 JUL 1996", "4 SEP 2000", "4 SEP 1962"), False)
-
-    def test3(self):
         self.assertEqual(US02("4 JUL 1996", "4 SEP 1996", "4 SEP 1962"), False)
-        
-    def test4(self):
         self.assertEqual(US02("4 JUL 1996", "5 JUL 1996", "4 SEP 1962"), False)
-    
-    def test5(self):
         self.assertEqual(US02("4 JUL 1996", "3 JUL 1996", "4 SEP 1962"), True)
     
+    def test_US03(self):
+        self.assertFalse(Project03.US03("9 MAY 2000", "10 FEB 1900"))
+        self.assertTrue(Project03.US03("9 MAY 2000", "10 FEB 2004"))
+        self.assertTrue(Project03.US03("15 SEP 1972", "10 OCT 2002"))
+        self.assertFalse(Project03.US03("27 JAN 1990", "26 JAN 1990"))
+        self.assertTrue(Project03.US03("1 DEC 1975", "1 DEC 1975"))
+    
+    def test_US06(self):
+        self.assertFalse(Project03.US06("9 MAY 2000", "10 FEB 1900", "24 MAR 1905"))
+        self.assertTrue(Project03.US06("9 MAY 2000", "10 FEB 2004", "24 MAR 2005"))
+        self.assertTrue(Project03.US06("15 SEP 1972", "10 OCT 2002", "30 AUG 1980"))
+        self.assertFalse(Project03.US06("27 JAN 1990", "26 JAN 1990", "22 JAN 1990"))
+        self.assertTrue(Project03.US06("1 DEC 1975", "1 DEC 1975", "1 DEC 1975"))
         
         
 if __name__ == '__main__':
