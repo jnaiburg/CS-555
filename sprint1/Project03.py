@@ -51,18 +51,28 @@ def US03(birth, death):
         return True
     
 def US06 (divorce, hdeath, wdeath):
-    if((hdeath == 'N/A' and wdeath == 'N/A') or divorce == 'N/A'):
+    if (hdeath == 'N/A' and wdeath == 'N/A'):
         return True
+    
+    if (divorce != 'N/A'):
+        return True
+    
     divd = divorce.split()
-    hdd = hdeath.split()
-    wdd = wdeath.split()
     divday = datetime.date(int(divd[2]), month_dict[divd[1]], int(divd[0]))
-    hdday = datetime.date(int(hdd[2]), month_dict[hdd[1]], int(hdd[0]))
-    wdday = datetime.date(int(wdd[2]), month_dict[wdd[1]], int(wdd[0]))
-    if (hdday < divday) or (wdday < divday) :
-        return False
-    else:
-        return True
+    
+    if (wdeath != 'N/A'):
+        wdd = wdeath.split()
+        wdday = datetime.date(int(wdd[2]), month_dict[wdd[1]], int(wdd[0]))
+        if(wdday < divday):
+            return False
+    
+    if (hdeath != 'N/A'):
+        hdd = hdeath.split()
+        hdday = datetime.date(int(hdd[2]), month_dict[hdd[1]], int(hdd[0]))
+        if (hdday < divday):
+            return False
+
+    return True
 
 def run():
     
