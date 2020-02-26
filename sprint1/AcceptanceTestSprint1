@@ -1,6 +1,5 @@
 import unittest
-
-from project03 import *
+import Project03
 
 class acceptanceTest(unittest.TestCase):
     
@@ -12,11 +11,11 @@ class acceptanceTest(unittest.TestCase):
         self.assertTrue(Project03.US01("3 MAR 2000"))
     
     def testUS02(self):
-        self.assertEqual(US02("4 JUL 1996", "4 SEP 1962", "4 SEP 1962"), True)
-        self.assertEqual(US02("4 JUL 1996", "4 SEP 2000", "4 SEP 1962"), False)
-        self.assertEqual(US02("4 JUL 1996", "4 SEP 1996", "4 SEP 1962"), False)
-        self.assertEqual(US02("4 JUL 1996", "5 JUL 1996", "4 SEP 1962"), False)
-        self.assertEqual(US02("4 JUL 1996", "3 JUL 1996", "4 SEP 1962"), True)
+        self.assertEqual(Project03.US02("4 JUL 1996", "4 SEP 1962", "4 SEP 1962"), True)
+        self.assertEqual(Project03.US02("4 JUL 1996", "4 SEP 2000", "4 SEP 1962"), False)
+        self.assertEqual(Project03.US02("4 JUL 1996", "4 SEP 1996", "4 SEP 1962"), False)
+        self.assertEqual(Project03.US02("4 JUL 1996", "5 JUL 1996", "4 SEP 1962"), False)
+        self.assertEqual(Project03.US02("4 JUL 1996", "3 JUL 1996", "4 SEP 1962"), True)
     
     def test_US03(self):
         self.assertFalse(Project03.US03("9 MAY 2000", "10 FEB 1900"))
@@ -33,11 +32,11 @@ class acceptanceTest(unittest.TestCase):
         self.assertTrue(Project03.US04("1 DEC 1975", "1 DEC 1976"))
         
     def test_US05(self):
-        self.assertEqual(US05("4 JUL 1996", "3 JUL 2001", "N/A"), True)
-        self.assertEqual(US05("4 JUL 1996", "N/A", "N/A"), True)
-        self.assertEqual(US05("4 JUL 1996", "3 JUL 2001", "3 JUL 1967"), False)
-        self.assertEqual(US05("4 JUL 1996", "3 JUL 1996", "N/A"), False)
-        self.assertEqual(US05("4 JUL 1996", "3 JUL 2001", "3 APR 2005"), True)
+        self.assertEqual(Project03.US05("4 JUL 1996", "3 JUL 2001", "N/A"), True)
+        self.assertEqual(Project03.US05("4 JUL 1996", "N/A", "N/A"), True)
+        self.assertEqual(Project03.US05("4 JUL 1996", "3 JUL 2001", "3 JUL 1967"), False)
+        self.assertEqual(Project03.US05("4 JUL 1996", "3 JUL 1996", "N/A"), False)
+        self.assertEqual(Project03.US05("4 JUL 1996", "3 JUL 2001", "3 APR 2005"), True)
     
     def test_US06(self):
         self.assertFalse(Project03.US06("9 MAY 2000", "10 FEB 1900", "24 MAR 1905"))
