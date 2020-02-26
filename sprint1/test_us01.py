@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from US01 import run
 
-class TestUS02(unittest.TestCase):
+class TestUS01(unittest.TestCase):
 
   def getTodayIntArrDate(self):
     ret = []
