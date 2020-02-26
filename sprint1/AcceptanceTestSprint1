@@ -4,6 +4,13 @@ from project03 import *
 
 class acceptanceTest(unittest.TestCase):
     
+    def test_US01(self):
+        self.assertTrue(Project03.US01("9 MAY 2000"))
+        self.assertTrue(Project03.US01("12 DEC 1977"))
+        self.assertFalse(Project03.US01("31 OCT 2025"))
+        self.assertFalse(Project03.US01("1 JAN 2050"))
+        self.assertTrue(Project03.US01("3 MAR 2000"))
+    
     def testUS02(self):
         self.assertEqual(US02("4 JUL 1996", "4 SEP 1962", "4 SEP 1962"), True)
         self.assertEqual(US02("4 JUL 1996", "4 SEP 2000", "4 SEP 1962"), False)
@@ -17,6 +24,13 @@ class acceptanceTest(unittest.TestCase):
         self.assertTrue(Project03.US03("15 SEP 1972", "10 OCT 2002"))
         self.assertFalse(Project03.US03("27 JAN 1990", "26 JAN 1990"))
         self.assertTrue(Project03.US03("1 DEC 1975", "1 DEC 1975"))
+    
+    def test_US04(self):
+        self.assertFalse(Project03.US04("9 MAY 2000", "10 FEB 1900"))
+        self.assertTrue(Project03.US04("9 MAY 2000", "10 FEB 2004"))
+        self.assertTrue(Project03.US04("15 SEP 1972", "10 OCT 2002"))
+        self.assertFalse(Project03.US04("27 JAN 1990", "26 JAN 1990"))
+        self.assertTrue(Project03.US04("1 DEC 1975", "1 DEC 1976"))
         
     def test_US05(self):
         self.assertEqual(US05("4 JUL 1996", "3 JUL 2001", "N/A"), True)
