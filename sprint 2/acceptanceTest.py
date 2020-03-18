@@ -1,11 +1,11 @@
 '''
 Created on Feb 19, 2020
 
-@author: Vincenzo Susi
+@author: Joseph Naiburg, Timothy Leonard, Vincenzo Susi
 '''
 
 import unittest
-import Project03
+import Project
 
 class acceptanceTest(unittest.TestCase):
     
