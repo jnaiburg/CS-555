@@ -190,19 +190,6 @@ def US08(bdate, mdate, ddate):
         if (bday - dday).days > 280:
             return False
     return True
-
-def Overlap(start1, end1, start2, end2):
-    r1 = [start1, end1]
-    r2 = [start2, end2]
-    
-    latestart = max(r1[0], r2[0])
-    earlyend = min[r1[1], r2[1]]
-    
-    diff = (earlyend -  latestart).days
-    
-    if diff > 0:
-        return True
-    return False
     
 def US11(marriage2, divorce, spousedeath):
     mtemp = marriage2.split()
