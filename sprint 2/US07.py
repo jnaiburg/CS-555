@@ -5,7 +5,6 @@ Created on Feb 5, 2020
 
 from prettytable import PrettyTable
 import datetime
-from dateutil import relativedelta
 
 
 month_dict = {
@@ -173,7 +172,6 @@ def US06 (divorce, hdeath, wdeath):
 
     return True
 
-# not older than 150
 def US07(bdate):
   bdate_num = strToIntArrDate(bdate)
   today = getCurrentDate()
@@ -189,7 +187,7 @@ def US07(bdate):
       else:
         return True
   else:
-    return True 
+    return True
 
 def US08(bdate, mdate, ddate):
     if mdate == 'N/A':
@@ -206,84 +204,12 @@ def US08(bdate, mdate, ddate):
     if ddate != 'N/A':
         ddatetemp = ddate.split()
         dday = datetime.date(int(ddatetemp[2]), month_dict[ddatetemp[1]], int(ddatetemp[0]))
-        if (bday - dday).days > 280:
+        if (bday - dday) > 90:
             return False
     return True
-
-#Born before death of parents
-def US09(mom, dad, birth):
-    if birth == 'N/A':
-        return True
-    if mom == 'N/A' and dad == 'N/A':
-        return True
     
-    bd = birth.split()
-    birthday = datetime.date(int(bd[2]), month_dict[bd[1]], int(bd[0]))
     
-    if mom == 'N/A' or dad == 'N/A':
-        if mom == 'N/A':
-            dd = dad.split()
-            dadDay = datetime.date(int(dd[2]), month_dict[dd[1]], int(dd[0]))
-            dadDay = dadDay + relativedelta.relativedelta(months=9)
-            if (birthday > dadDay):
-                return False
-        if dad == 'N/A':
-            md = mom.split()
-            momDay = datetime.date(int(md[2]), month_dict[md[1]], int(md[0]))
-            if (birthday > momDay):
-                return False
-        return True
-        
-    md = mom.split()
-    dd = dad.split()
-    momDay = datetime.date(int(md[2]), month_dict[md[1]], int(md[0]))
-    dadDay = datetime.date(int(dd[2]), month_dict[dd[1]], int(dd[0]))
-    dadDay = dadDay + relativedelta.relativedelta(months=9)
-    if (birthday > momDay) or (birthday > dadDay):
-        return False
     
-    return True
-
-# not married before 14
-def US10(mdate, bdate):
-    if mdate == 'N/A':
-      return True
-    num_mdate = strToIntArrDate(mdate)
-    num_bdate = strToIntArrDate(bdate)
-    age = num_mdate[2] - num_bdate[2]
-    if num_mdate[1] <= num_bdate[1] and num_mdate[2] <= num_bdate[2]:
-      age = age + 1
-    if(age < 14):
-      return False
-    else:
-      return True
-
-def US11(marriage2, divorce, spousedeath):
-    mtemp = marriage2.split()
-    mday = datetime.date(int(mtemp[2]), month_dict[mtemp[1]], int(mtemp[0]))
-    
-    if divorce != 'N/A':
-        dtemp = divorce.split()
-        dday = datetime.date(int(dtemp[2]), month_dict[dtemp[1]], int(dtemp[0]))
-        if dday > mday:
-            return False
-        else:
-            return True
-    elif spousedeath != 'N/A':
-        dtemp = spousedeath.split()
-        dday = datetime.date(int(dtemp[2]), month_dict[dtemp[1]], int(dtemp[0]))
-        if dday > mday:
-            return False
-        else:
-            return True
-    else:
-        return False
-
-#Parents not too old (mom < 60 years older than children, dad < 80)
-def US12(momAge, dadAge, childAge):
-    if ((momAge - childAge >= 60) or (dadAge - childAge >= 80)):
-        return False
-    return True
 
 def run():
     
@@ -291,7 +217,7 @@ def run():
     itable = PrettyTable()
     ftable = PrettyTable()
     #open the ged file
-    f = open("Project01.ged", "r")
+    f = open("../gedcom.ged", "r")
     #make the columns for the itable
     itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Age', 'Alive', 'Death Date', 'Child', 'Spouse']
     ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Husband Name', 'Wife ID', 'Wife Name', 'Children']
@@ -345,7 +271,7 @@ def run():
                         #make sure birth date is before death date
                         if not US03(bdate, ddate):
                             print("Error: Family with id " + famid + " has a death date before a birth date")
-                         if not US07(bdate):
+                        if not US07(bdate):
                             print("Error: Family with id " + famid + " "+ bdate + "is older than 150")
                         #get the new id for the next guy
                     indi = temp[1]
@@ -367,31 +293,21 @@ def run():
                         if(not US04(mdate, divorced)):
                             raise SyntaxError('Cannot have a divorce date earlier than marriage date')
                         
+                        
+                        
+                        ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
+                        fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
+                        
                         bdatetemphusb = people_dict[husbid][2]
                         bdatetempwife = people_dict[wifeid][2]
                         
                         ddatetemphusb = people_dict[husbid][5]
                         ddatetempwife = people_dict[wifeid][5]
                         
-                        for family in fam_dict:
-                            if family[2] == husbid:
-                                if not (US11(mdate, family[1], ddatetempwife) and US11(family[1], divorced, people_dict[family[3]][5])):
-                                    print("Error: " + husbid + " cannot be married to two wives at the same time")
-                            if family[3] == wifeid:
-                                if not (US11(mdate, family[1], ddatetemphusb) and US11(family[1], divorced, people_dict[family[2]][5])):
-                                    print("Error: " + wifeid + " cannot be married to two wives at the same time")
-                        
-                        ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
-                        fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
-                        
                         for child in children:
                             bdatechild = people_dict[child][2]
                             if not US08(bdatechild, mdate, divorced):
                                 print("Error: family with id " + famid + "has a birth date for a child not within the marriage")
-                            if not US09(people_dict[wifeid][5], people_dict[husbid][5], bdatechild):
-                                print("Error: Child with id " + child + " has a birth date after the death of his parents")
-                            if not US12(people_dict[wifeid][3], people_dict[husbid][3], people_dict[child][3]):
-                                print("Error: Child with id " + child + " has parents that are too old")
                         
                         #make sure marriage date is after birth date
                         if not US02(mdate, bdatetemphusb, bdatetempwife):
@@ -488,8 +404,7 @@ def run():
         print("Error: Family with id " + famid + " has a marriage date after a death date")
     if not US06(divorced, people_dict[husbid][5], people_dict[wifeid][5]):
         print("Error: Family with id " + famid + " has a death date before a divorce date")
-    if not US10(mdate, bdate):
-        print("Error: Family with id " + famid + " has a marriage before 14")
+
     print("Individuals")
     print(itable)
     print("Families")
@@ -497,5 +412,3 @@ def run():
             
         
 run()
-
-
