@@ -58,6 +58,13 @@ class acceptanceTest(unittest.TestCase):
         self.assertFalse(Project03.US09("27 JAN 1990", "26 JAN 1980", "22 JAN 1985"))
         self.assertTrue(Project03.US09("1 DEC 1975", "1 DEC 1975", "1 DEC 1975"))
         
+    def testUS11(self):
+        self.assertEqual(Project03.US11("4 JUL 1996", "N/A", "N/A"), False)
+        self.assertEqual(Project03.US11("4 JUL 1996", "4 SEP 1962", "N/A"), True)
+        self.assertEqual(Project03.US11("4 JUL 1997", "N/A", "4 SEP 1962"), True)
+        self.assertEqual(Project03.US11("4 JUL 1996", "5 JUL 1962", "4 JAN 1996"), True)
+        self.assertEqual(Project03.US11("4 JUL 1996", "3 JUL 1998", "N/A"), False)
+        
     def test_US12(self):
         self.assertTrue(Project03.US12(30, 30, 30))
         self.assertFalse(Project03.US12(80, 50, 15))
