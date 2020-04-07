@@ -7,7 +7,6 @@ from prettytable import PrettyTable
 import datetime
 from dateutil import relativedelta
 
-
 month_dict = {
         'JAN' : 1,
         'FEB' : 2,
@@ -284,6 +283,7 @@ def US12(momAge, dadAge, childAge):
     if ((momAge - childAge >= 60) or (dadAge - childAge >= 80)):
         return False
     return True
+
 #no more than 5 kids in one family can have the same birthday
 def US14(birth_dates):
     for x in birth_dates:
@@ -298,6 +298,15 @@ def US15(children):
     if (len(children) >= 15):
         return False
     return True
+
+#returns false if marriage to a descendant
+def US17(husband, wife, children):
+    if husband in children:
+        return False
+    if wife in children:
+        return False
+    return True
+    
 
 #Siblings should not marry (returns false if at least two are married)
 def US18(children):
@@ -437,6 +446,9 @@ def run():
                         # Checks for fewer than 15 children in a family
                         if not US15(children):
                             print("Error: Family with id " + famid + " has 15 or more siblings")
+                        #check that marriage is not to children
+                        if not US17(husbid, wifeid, children):
+                            print("Error: Cannot marry children")
                         # Checks that siblings aren't married
                         if not US18(children):
                             print("Error: Family with id " + famid + " has siblings who are married to each other")
