@@ -284,6 +284,12 @@ def US12(momAge, dadAge, childAge):
     if ((momAge - childAge >= 60) or (dadAge - childAge >= 80)):
         return False
     return True
+#no more than 5 kids in one family can have the same birthday
+def US14(birth_dates):
+    for x in birth_dates:
+        if birth_dates.count(x) > 5:
+            return False
+    return True  
 
 #Fewer than 15 siblings (returns false if 15 or more)
 def US15(children):
@@ -313,7 +319,7 @@ def run():
     itable = PrettyTable()
     ftable = PrettyTable()
     #open the ged file
-    f = open("gedcom.ged", "r")
+    f = open("Project01.ged", "r")
     #make the columns for the itable
     itable.field_names = ['ID', 'Name', 'Gender', 'Birth Date', 'Age', 'Alive', 'Death Date', 'Child', 'Spouse']
     ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Husband Name', 'Wife ID', 'Wife Name', 'Children']
@@ -406,6 +412,8 @@ def run():
                         ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
                         fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
                         
+                        child_bdatelist = []
+                        
                         for child in children:
                             bdatechild = people_dict[child][2]
                             if not US08(bdatechild, mdate, divorced):
@@ -414,6 +422,10 @@ def run():
                                 print("Error: Child with id " + child + " has a birth date after the death of his parents")
                             if not US12(people_dict[wifeid][3], people_dict[husbid][3], people_dict[child][3]):
                                 print("Error: Child with id " + child + " has parents that are too old")
+                            child_bdatelist.append(bdatechild)
+                        
+                        if not US14(child_bdatelist):
+                            print("Error: More than 5 children in family " + famid + " are born on the same day")
                         
                         # make sure marriage date is after birth date
                         if not US02(mdate, bdatetemphusb, bdatetempwife):
@@ -502,7 +514,6 @@ def run():
     
     ftable.add_row([famid, mdate, divorced, husbid, husband, wifeid, wife, children])
     fam_dict[famid] = [mdate, divorced, husbid, wifeid, children]
-    
     bdatetemphusb = people_dict[husbid][2]
     bdatetempwife = people_dict[wifeid][2]
                         
