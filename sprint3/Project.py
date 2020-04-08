@@ -284,12 +284,26 @@ def US12(momAge, dadAge, childAge):
         return False
     return True
 
+#each sibling is born at least 9 months after the previous
+def US13(birth_dates):
+  for i in range(len(birth_dates)):
+    for j in range(len(birth_dates)):
+      if i != j:
+        d1 = strToIntArrDate(birth_dates[i])
+        d2 = strToIntArrDate(birth_dates[j])
+        d1m = 12*d1[2] + d1[1]
+        d2m = 12*d2[2] + d2[1]
+        if not abs(d1m - d2m) >= 9:
+          return False
+  return True
+
+
 #no more than 5 kids in one family can have the same birthday
 def US14(birth_dates):
     for x in birth_dates:
         if birth_dates.count(x) > 5:
             return False
-    return True  
+    return True
 
 #Fewer than 15 siblings (returns false if 15 or more)
 def US15(children):
@@ -298,6 +312,12 @@ def US15(children):
     if (len(children) >= 15):
         return False
     return True
+
+def US16(husband, wife):
+  hl = husband.split(' ')[1]
+  wl = wife.split(' ')[1]
+  return hl == wl
+
 
 #returns false if marriage to a descendant
 def US17(husband, wife, children):
@@ -432,7 +452,8 @@ def run():
                             if not US12(people_dict[wifeid][3], people_dict[husbid][3], people_dict[child][3]):
                                 print("Error: Child with id " + child + " has parents that are too old")
                             child_bdatelist.append(bdatechild)
-                        
+                        if not US13(child_bdatelist):
+                            print("Error two children born withing 9 months of each other in family " + famid)
                         if not US14(child_bdatelist):
                             print("Error: More than 5 children in family " + famid + " are born on the same day")
                         
@@ -446,6 +467,8 @@ def run():
                         # Checks for fewer than 15 children in a family
                         if not US15(children):
                             print("Error: Family with id " + famid + " has 15 or more siblings")
+                        if not US16(husband, wife):
+                            print("Error husband and wife do not share the husband's last name")
                         #check that marriage is not to children
                         if not US17(husbid, wifeid, children):
                             print("Error: Cannot marry children")

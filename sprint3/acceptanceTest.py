@@ -91,6 +91,13 @@ class acceptanceTest(unittest.TestCase):
         self.assertFalse(Project.US12(40, 100, 12))
         self.assertTrue(Project.US12(45, 45, 20))
         self.assertTrue(Project.US12(50, 60, 15))
+
+    def test_US13(self):
+        self.assertTrue(Project.US13(["4 JUL 1996", "4 JUL 1997"]))
+        self.assertFalse(Project.US13(["4 JUL 1996", "4 JUL 1996"]))
+        self.assertTrue(Project.US13(["2 JUL 1800", "2 Aug 1997"]))
+        self.assertFalse(Project.US13(["4 JUL 1996", "5 JUL 1996"]))
+        self.assertTrue(Project.US13([]))
         
     def testUS14(self):
         self.assertEqual(Project.US14(["4 JUL 1996", "4 JUL 1996", "4 JUL 1996", "4 JUL 1996", "4 JUL 1996"]), True)
@@ -108,6 +115,14 @@ class acceptanceTest(unittest.TestCase):
                                        '@I8@', '@I9@', '@I12@', '@I13@', '@I14@', '@I15@', '@I16@']))
         self.assertTrue(Project.US15([]))
         
+    def test_US16(self):
+        self.assertTrue(Project.US16('John Smith', 'Elenor Smith'))
+        self.assertTrue(Project.US16('Billy Nye', 'Nye Nye'))
+        self.assertTrue(Project.US16('Bernie Sanders', 'Bernie Sanders'))
+        self.assertFalse(Project.US16('John Smith', 'Smith Elenor'))
+        self.assertFalse(Project.US16('Smith Bob', 'Bob Smith'))
+
+
     def testUS17(self):
         self.assertEqual(Project.US17("@I1@", "@I2@", []), True)
         self.assertEqual(Project.US17("@I1@", "@I2@", ["@I1@"]), False)
