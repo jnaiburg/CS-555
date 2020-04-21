@@ -342,6 +342,12 @@ def US18(children):
                 return False
     return True
 
+def US20(husband, wife, child):
+    if husband == child or wife == child:
+        return False
+    return True
+    
+
 def US21(husb, wife): # Correct gender for role
     if husb != 'M':
         return False
@@ -480,6 +486,9 @@ def run():
                             if not US12(people_dict[wifeid][3], people_dict[husbid][3], people_dict[child][3]):
                                 print("Error: Child with id " + child + " has parents that are too old")
                             child_bdatelist.append(bdatechild)
+                        
+                           
+                            
                         if not US13(child_bdatelist):
                             print("Error two children born withing 9 months of each other in family " + famid)
                         if not US14(child_bdatelist):
@@ -500,6 +509,28 @@ def run():
                         #check that marriage is not to children
                         if not US17(husbid, wifeid, children):
                             print("Error: Cannot marry children")
+                        
+                        childfam1 = people_dict[husbid][6]
+                        childfam2 = people_dict[wifeid][6]
+                        
+                        if childfam1 != "N/A":
+                            for sibling in fam_dict[childfam1][4]:
+                                spousefam = people_dict[sibling][7]
+                                
+                                if spousefam != "N/A":
+                                    for nieceneph in  fam_dict[spousefam][4]:
+                                        if not US20(husbid, wifeid, nieceneph):
+                                            print("Error: you can't marry your niece of nephew")
+                        
+                        if childfam2 != "N/A":          
+                            for sibling in fam_dict[childfam2][4]:
+                                spousefam = people_dict[sibling][7]
+                                
+                                if spousefam != "N/A":
+                                    for nieceneph in  fam_dict[spousefam][4]:
+                                        if not US20(husbid, wifeid, nieceneph):
+                                            print("Error: you can't marry your niece of nephew")
+                                
                         # Checks that siblings aren't married
                         if not US18(children):
                             print("Error: Family with id " + famid + " has siblings who are married to each other")
