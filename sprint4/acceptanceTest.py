@@ -136,6 +136,13 @@ class acceptanceTest(unittest.TestCase):
         self.assertTrue(Project.US15([]))
         self.assertTrue(Project.US15('N/A'))
         self.assertTrue(Project.US15(['@I9']))
+    
+    def testUS20(self):
+        self.assertEqual(Project.US20("@I1@", "@I2@", "@I3@"), True)
+        self.assertEqual(Project.US20("@I1@", "@I2@", "@I1@"), False)
+        self.assertEqual(Project.US20("@I1@", "@I2@", "@I2@"), False)
+        self.assertEqual(Project.US20("@I1@", "@I2@", "@I4@"), True)
+        self.assertEqual(Project.US20("@I1@", "@I1@", "@I3@"), True)
 
     def test_US21(self):
         self.assertFalse(Project.US21('', ''))
