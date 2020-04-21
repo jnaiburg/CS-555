@@ -286,16 +286,16 @@ def US12(momAge, dadAge, childAge):
 
 #each sibling is born at least 9 months after the previous
 def US13(birth_dates):
-  for i in range(len(birth_dates)):
-    for j in range(len(birth_dates)):
-      if i != j:
-        d1 = strToIntArrDate(birth_dates[i])
-        d2 = strToIntArrDate(birth_dates[j])
-        d1m = 12*d1[2] + d1[1]
-        d2m = 12*d2[2] + d2[1]
-        if not abs(d1m - d2m) >= 9:
-          return False
-  return True
+    for i in range(len(birth_dates)):
+        for j in range(len(birth_dates)):
+            if i != j:
+                d1 = strToIntArrDate(birth_dates[i])
+                d2 = strToIntArrDate(birth_dates[j])
+                d1m = 12*d1[2] + d1[1]
+                d2m = 12*d2[2] + d2[1]
+                if not abs(d1m - d2m) >= 9:
+                    return False
+    return True
 
 
 #no more than 5 kids in one family can have the same birthday
@@ -314,9 +314,9 @@ def US15(children):
     return True
 
 def US16(husband, wife):
-  hl = husband.split(' ')[1]
-  wl = wife.split(' ')[1]
-  return hl == wl
+    hl = husband.split(' ')[1]
+    wl = wife.split(' ')[1]
+    return hl == wl
 
 
 #returns false if marriage to a descendant
@@ -348,6 +348,13 @@ def US21(husb, wife): # Correct gender for role
     if wife != 'F':
         return False
     return True
+
+def US23(p_dict, name, bdate): #unique name and birth date
+    for person in p_dict:
+        if (p_dict[person][0] == name) and  (p_dict[person][2] == bdate):
+            return False
+    return True
+    
 
 def US24(husb1, wife1, mdate1, husb2, wife2, mdate2): # Unique family by spouse
     if husb1 == husb2 and wife1 == wife2:
@@ -406,12 +413,18 @@ def run():
                             raise SyntaxError('Dates must be today or earlier')
 
                         itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
+                        
+                        if not US23(people_dict, name, bdate):
+                            print("Error: individual with id " + indi + " does not have a unique name and birth date")
+                        
                         people_dict[indi] = [name, sex, bdate, age, alive, ddate, child, spouse]
                         ddate = 'N/A'
                         alive = 'True'
                         child = 'N/A'
                         spouse = 'N/A'
-
+                        
+                        
+                        
                         # make sure birth date is before death date
                         if not US03(bdate, ddate):
                             print("Error: Family with id " + famid + " has a death date before a birth date")
