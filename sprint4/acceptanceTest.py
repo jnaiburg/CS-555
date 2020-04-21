@@ -142,6 +142,17 @@ class acceptanceTest(unittest.TestCase):
         self.assertFalse(Project.US21('A', 'B'))
         self.assertFalse(Project.US21('F', 'M'))
         self.assertTrue(Project.US21('M', 'F'))
+        
+    def testUS23(self):
+        p_dict = {}
+        p_dict["1"] = ["Bill /Smith/", "M", "6 May 1930", "90", "True", "N/A", "N/A", "N/A"]
+        p_dict["2"] = ["Carol /Jones/", "F", "6 May 1932", "88", "True", "N/A", "N/A", "N/A"]
+        
+        self.assertEqual(Project.US23(p_dict, "Bill /Smith/", "6 May 1930"), False)
+        self.assertEqual(Project.US23(p_dict, "Carol /Jones/", "6 May 1932"), False)
+        self.assertEqual(Project.US23(p_dict, "Carol /Jones/", "6 May 1930"), True)
+        self.assertEqual(Project.US23(p_dict, "Bill /Smith/", "6 May 1932"), True)
+        self.assertEqual(Project.US23(p_dict, "Tom /Hanks/", "6 May 1937"), True)
 
     def test_US24(self):
         self.assertTrue(Project.US24("Name1", "Name2", "10 FEB 1900", "Name3", "Name4", "24 MAR 1900"))
