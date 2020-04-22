@@ -342,11 +342,16 @@ def US18(children):
                 return False
     return True
 
+def US19(hid, wid):
+  if hid[1] == wid[1]:
+    return False
+  else:
+     return True     
+
 def US20(husband, wife, child):
     if husband == child or wife == child:
         return False
     return True
-    
 
 def US21(husb, wife): # Correct gender for role
     if husb != 'M':
@@ -354,6 +359,10 @@ def US21(husb, wife): # Correct gender for role
     if wife != 'F':
         return False
     return True
+
+def US22(col):
+  return (len(set(col)) == len(col))
+
 
 def US23(p_dict, name, bdate): #unique name and birth date
     for person in p_dict:
@@ -380,6 +389,7 @@ def run():
     ftable.field_names = ['ID', 'Married', 'Divorced', 'Husband ID', 'Husband Name', 'Wife ID', 'Wife Name', 'Children']
     #initialize a bunch of variables
     indi = ''
+    indi_list = []
     name = ''
     sex = ''
     bdate = ''
@@ -419,6 +429,7 @@ def run():
                             raise SyntaxError('Dates must be today or earlier')
 
                         itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
+                        indi_list.append(indi)
                         
                         if not US23(people_dict, name, bdate):
                             print("Error: individual with id " + indi + " does not have a unique name and birth date")
@@ -445,6 +456,7 @@ def run():
 
                         itable.add_row([indi, name, sex, bdate, age, alive, ddate, child, spouse])
                         people_dict[indi] = [name, sex, bdate, age, alive, ddate, child, spouse]
+                        indi_list.append(indi)
                         isindi = False
                     else:
                         if children == []:
@@ -455,6 +467,8 @@ def run():
 
                         if(not US04(mdate, divorced)):
                             raise SyntaxError('Cannot have a divorce date earlier than marriage date')
+                        if not US22(indi_list):
+                            print("Error: All ID's must be unqiue")
 
                         bdatetemphusb = people_dict[husbid][2]
                         bdatetempwife = people_dict[wifeid][2]
@@ -509,6 +523,8 @@ def run():
                         #check that marriage is not to children
                         if not US17(husbid, wifeid, children):
                             print("Error: Cannot marry children")
+                        if not US19(husbid, wifeid):
+                            print("Error: Cannot marry a cousin")
                         
                         childfam1 = people_dict[husbid][6]
                         childfam2 = people_dict[wifeid][6]

@@ -136,7 +136,14 @@ class acceptanceTest(unittest.TestCase):
         self.assertTrue(Project.US15([]))
         self.assertTrue(Project.US15('N/A'))
         self.assertTrue(Project.US15(['@I9']))
-    
+
+    def test_US19(self): #check letter in the ID, if it matches return false
+        self.assertTrue(Project.US19('@F1@', '@Q2@'))
+        self.assertFalse(Project.US19('@E2@', '@E2@'))
+        self.assertTrue(Project.US19('@Q2@', '@E1@'))
+        self.assertTrue(Project.US19('@Z2@', '@E3@'))
+        self.assertFalse(Project.US19('@T1@', '@T2@'))
+  
     def testUS20(self):
         self.assertEqual(Project.US20("@I1@", "@I2@", "@I3@"), True)
         self.assertEqual(Project.US20("@I1@", "@I2@", "@I1@"), False)
@@ -150,6 +157,13 @@ class acceptanceTest(unittest.TestCase):
         self.assertFalse(Project.US21('F', 'M'))
         self.assertTrue(Project.US21('M', 'F'))
         
+    def test_US22(self):
+        self.assertTrue(Project.US22(["@I1@", "@I2@", "@I3@"]))
+        self.assertFalse(Project.US22(["@I1@", "@I1@", "@Z3@"]))
+        self.assertFalse(Project.US22(["@L1@", "@A1@", "@L1@", "@Z3@"]))
+        self.assertTrue(Project.US22(["@A9@"]))
+        self.assertTrue(Project.US22(["@E1@", "@E2@", "@E3@", "@E4@", "@E5", "@E6@"]))
+
     def testUS23(self):
         p_dict = {}
         p_dict["1"] = ["Bill /Smith/", "M", "6 May 1930", "90", "True", "N/A", "N/A", "N/A"]
